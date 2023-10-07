@@ -1,0 +1,13 @@
+package ru.rtech;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication(scanBasePackages = {"ru.rtech"})
+public class SqlConverterApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(SqlConverterApplication.class, args);
+	}
+
+}

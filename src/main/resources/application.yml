@@ -1,0 +1,46 @@
+endpoint:
+  url: http://httpbin.org
+#actuator
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health,env,prometheus
+
+server:
+  port: 8080
+
+springdoc:
+  packages-to-scan: org.crm.controller
+  paths-to-match: /**
+  api-docs:
+    path: /api-docs
+
+logger:
+  name: ${rootProject.name}
+  version: ${version}
+  type: microservices
+  tags: template, service
+  zone: localhost
+  level: DEBUG
+
+logging:
+  level:
+    ROOT: DEBUG
+
+#tracing
+app:
+  tracing:
+    enable: true
+    prefix: "header."
+    headers:
+      - x-taskid
+      - x-business-key
+      - x-mrf
+      - x-affiliate-id
+      - x-client-call-time-millis
+      - x-use-cache
+      - x-session-id
