@@ -5,10 +5,10 @@ import static ru.rtech.util.Constant.Field.DICT_INST_REF_ID;
 import static ru.rtech.util.Constant.Field.EXT_ID;
 import static ru.rtech.util.Constant.Field.TITLE;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.jsonschema.JsonSerializableSchema;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,18 +25,24 @@ import lombok.NoArgsConstructor;
 public class CsvFieldDto {
 
     @JsonProperty(EXT_ID)
-    private Long fieldValueOne;
+    private String fieldValueOne;
     @JsonProperty(CODE)
-    private List<String> fieldValueTwo;
+    private String fieldValueTwo;
     @JsonProperty(TITLE)
-    private List<String> fieldValueThree;
+    private String fieldValueThree;
     @JsonProperty(DICT_INST_REF_ID)
     private String fieldValueFour;
-//    private String fieldValueFive;
-//    private String fieldValueSix;
-//    private String fieldValueSeven;
-//    private String fieldValueEight;
-//    private String fieldValueNine;
-//    private String fieldValueTen;
+    @JsonIgnore
+    private String fieldValueFive;
+    @JsonIgnore
+    private String fieldValueSix;
+    @JsonIgnore
+    private String fieldValueSeven;
+    @JsonIgnore
+    private String fieldValueEight;
+    @JsonIgnore
+    private String fieldValueNine;
+    @JsonIgnore
+    private String fieldValueTen;
 
 }

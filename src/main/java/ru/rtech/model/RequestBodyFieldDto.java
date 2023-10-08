@@ -15,25 +15,15 @@ public class RequestBodyFieldDto {
 
     private String dbName; // - наименование БД
     private String schemeName; // - наименование схемы
-    private String subQueryName; // - наименование схемы
-    private String fieldNameOne; // поля из csv по дефолту считаем String если не нужны кавычки при конвератации
-                             // стоит указывать тип в скобках
-                             // Пример: id(Long)
-                             // Если нужен подзапрос то указывать вместе с таблицей
-                             // Пример: tcase.id(Long)
-    private String fieldNameTwo;
-    private String fieldNameThree;
-    private String fieldNameFour;
-    private String fieldNameFive;
-    private String fieldNameSix;
-    private String fieldNameSeven;
-    private String fieldNameEight;
-    private String fieldNameNine;
-    private String fieldNameTen;
+    private String subQueryName; // - полный путь до значения подзапроса в бд
+                                 // - Пример: db.tdictionary_instance.ref_id
+    private String valuesText; // текст из VALUES
+                               // Пример (id, ref_id, code, title, tdictionary_instance.id, create_date)
     private Integer countField; // колличество полей переданых на вход
+    private Integer subQueryFieldNumber; // номер колонки с значением для подзапроса
     private Boolean updateTime; // если при insert нужно заполнить поле время обновления записи
-                                // то в каждом запросе добавиться 'current_timestamp'
+                                // то в каждом запросе добавиться в конце 'current_timestamp'
     private Boolean createTime; // поднять флаг если в запросе есть время создания записи
-                                // к каждой записи добавиться 'current_timestamp'
+                                // к каждой записи добавиться в конце 'current_timestamp'
 
 }
