@@ -1,6 +1,8 @@
 package ru.rtech.service.impl;
 
 import static ru.rtech.util.Constant.CHARSET;
+import static ru.rtech.util.Constant.ErrorText.CSV_FORMAT_IS_NOT_CORRECT;
+import static ru.rtech.util.Constant.ErrorText.CSV_IS_NOT_CORRECT;
 
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.dataformat.csv.CsvReadException;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.rtech.model.CsvFieldDto;
 import ru.rtech.service.CsvReadService;
+import ru.rtech.util.exception.FileNotCorrectException;
 
 @Service
 @RequiredArgsConstructor
@@ -26,20 +29,19 @@ public class CsvReadServiceImpl implements CsvReadService {
         try {
             fieldsDto = read(file.getInputStream());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new FileNotCorrectException(e.getMessage());
         }
         return fieldsDto;
     }
 
     private List<CsvFieldDto> read(InputStream stream) {
         List<CsvFieldDto> csvFieldDtoList;
-
         try {
             csvFieldDtoList = objectReader.<CsvFieldDto>readValues(new InputStreamReader(stream, CHARSET)).readAll();
         } catch (CsvReadException csvReadException) {
-            throw new RuntimeException();
+            throw new FileNotCorrectException(CSV_FORMAT_IS_NOT_CORRECT);
         } catch (IOException e) {
-            throw new RuntimeException();
+            throw new FileNotCorrectException(CSV_IS_NOT_CORRECT);
         }
         return csvFieldDtoList;
     }

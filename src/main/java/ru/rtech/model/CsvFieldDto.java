@@ -1,8 +1,8 @@
 package ru.rtech.model;
 
-import static ru.rtech.util.Constant.Field.CODE;
 import static ru.rtech.util.Constant.Field.DICT_INST_REF_ID;
 import static ru.rtech.util.Constant.Field.EXT_ID;
+import static ru.rtech.util.Constant.Field.IS_VISIBLE;
 import static ru.rtech.util.Constant.Field.TITLE;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -26,10 +26,10 @@ public class CsvFieldDto {
 
     @JsonProperty(EXT_ID)
     private String fieldValueOne;
-    @JsonProperty(CODE)
-    private String fieldValueTwo;
     @JsonProperty(TITLE)
-    private String fieldValueThree;
+    private String fieldValueTwo;
+    @JsonProperty(IS_VISIBLE)
+    private Boolean fieldValueThree;
     @JsonProperty(DICT_INST_REF_ID)
     private String fieldValueFour;
     @JsonIgnore

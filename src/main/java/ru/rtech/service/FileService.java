@@ -1,6 +1,5 @@
 package ru.rtech.service;
 
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 import ru.rtech.model.RequestBodyFieldDto;

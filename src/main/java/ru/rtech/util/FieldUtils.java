@@ -26,7 +26,7 @@ public class FieldUtils {
         return switch (request.getSubQueryFieldNumber()) {
             case 1 -> dto.getFieldValueOne();
             case 2 -> dto.getFieldValueTwo();
-            case 3 -> dto.getFieldValueThree();
+            case 3 -> dto.getFieldValueThree().toString();
             case 4 -> dto.getFieldValueFour();
             case 5 -> dto.getFieldValueFive();
             case 6 -> dto.getFieldValueSix();
@@ -42,7 +42,7 @@ public class FieldUtils {
         switch (request.getSubQueryFieldNumber()) {
             case 1 -> dto.setFieldValueOne(getStringParamWithPostfix(dto.getFieldValueOne()));
             case 2 -> dto.setFieldValueTwo(getStringParamWithPostfix(dto.getFieldValueTwo()));
-            case 3 -> dto.setFieldValueThree(getStringParamWithPostfix(dto.getFieldValueThree()));
+//            case 3 -> dto.setFieldValueThree(getStringParamWithPostfix(dto.getFieldValueThree()));
             case 4 -> dto.setFieldValueFour(getStringParamWithPostfix(dto.getFieldValueFour()));
             case 5 -> dto.setFieldValueFive(getStringParamWithPostfix(dto.getFieldValueFive()));
             case 6 -> dto.setFieldValueSix(getStringParamWithPostfix(dto.getFieldValueSix()));

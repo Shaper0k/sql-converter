@@ -23,6 +23,7 @@ public class Constant {
         public static final String EXT_ID = "ext_id";
         public static final String CODE = "code";
         public static final String TITLE = "title";
+        public static final String IS_VISIBLE = "is_visible";
         public static final String FIELD_POSTFIX = "_FIELD";
         public static final String CURRENT_TIMESTAMP = "current_timestamp";
 
@@ -66,6 +67,8 @@ public class Constant {
 
         public static final String SUB_QUERY_FIELD_NUMBER_IS_NOT_CORRECT = "field subQueryFieldNumber have <0 or >10";
         public static final String COUNT_FIELD_IS_NOT_CORRECT = "count fields is maybe >3 or <10";
+        public static final String CSV_IS_NOT_CORRECT = "file cannot read";
+        public static final String CSV_FORMAT_IS_NOT_CORRECT = "format in file is not correct";
 
     }
 

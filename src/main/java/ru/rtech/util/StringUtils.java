@@ -1,5 +1,6 @@
 package ru.rtech.util;
 
+import static java.util.Objects.isNull;
 import static ru.rtech.util.Constant.APOSTROPHE;
 import static ru.rtech.util.Constant.COMMA;
 import static ru.rtech.util.Constant.DOUBLE_APOSTROPHE;
@@ -37,7 +38,7 @@ public class StringUtils {
             str = str.replace(APOSTROPHE, DOUBLE_APOSTROPHE);
             return APOSTROPHE + str + APOSTROPHE;
         }
-        return value.toString();
+        return isNull(value) ? null : value.toString();
     }
 
     public static StringBuilder getValueParamForThree(CsvFieldDto csvFieldDto, FieldContext context,

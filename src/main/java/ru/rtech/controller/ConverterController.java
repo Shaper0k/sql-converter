@@ -17,11 +17,12 @@ public class ConverterController {
 
     private final FileService fileService;
 
-    @PostMapping(value = "/convert", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/convert", consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<Resource> getSVCFile(
             @RequestPart(value = "file") final MultipartFile multipartFile,
             @RequestPart(value = "body") RequestBodyFieldDto requestDto) {
-       return ResponseEntity.ok(fileService.convertSVCToSQLScriptFile(multipartFile, requestDto));
+        return ResponseEntity.ok(fileService.convertSVCToSQLScriptFile(multipartFile, requestDto));
     }
 
 }

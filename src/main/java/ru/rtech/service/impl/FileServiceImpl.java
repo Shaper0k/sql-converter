@@ -10,8 +10,16 @@ import static ru.rtech.util.FieldUtils.getSQLValuesInStringBuilder;
 import static ru.rtech.util.FieldUtils.setInNeededConstantField;
 import static ru.rtech.util.StringUtils.getStringParamWithPostfix;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +28,7 @@ import ru.rtech.model.FieldContext;
 import ru.rtech.model.RequestBodyFieldDto;
 import ru.rtech.service.CsvReadService;
 import ru.rtech.service.FileService;
+import ru.rtech.util.exception.BadReturnFileException;
 
 @Service
 @RequiredArgsConstructor
@@ -36,8 +45,12 @@ public class FileServiceImpl implements FileService {
         updateSubQueryField(csvField, requestDto);
         csvField.forEach(fields -> getSQLValuesInStringBuilder(fields, requestDto, context));
         endTextInStringBuilder(context);
-        System.out.println(context.getAllSqlQueryStringBuilder().toString());
-        return null;
+        try {
+            return new ByteArrayResource(Files.readAllBytes(Path.of("src/main/resources/converted-sql.sql")));
+        } catch (IOException e) {
+            throw new BadReturnFileException(e.getMessage());
+        }
+
     }
 
     private void getStringBuilderWithFirstParams(String paramValue, RequestBodyFieldDto requestDto,
@@ -74,6 +87,15 @@ public class FileServiceImpl implements FileService {
         var sb = context.getAllSqlQueryStringBuilder();
         sb.replace(sb.lastIndexOf(","), sb.lastIndexOf(",") + 1, ";")
                 .append(END_INSERT_QUERY_TEXT);
+    }
+
+    @SneakyThrows
+    private File writeStringBuilderToFile(StringBuilder stringBuilder) {
+        File fileOutput = new File("src/main/resources/converted-sql.sql");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileOutput))) {
+            writer.append(stringBuilder);
+        }
+        return fileOutput;
     }
 
 }
