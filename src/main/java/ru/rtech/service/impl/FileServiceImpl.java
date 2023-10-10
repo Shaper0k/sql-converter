@@ -45,6 +45,7 @@ public class FileServiceImpl implements FileService {
         updateSubQueryField(csvField, requestDto);
         csvField.forEach(fields -> getSQLValuesInStringBuilder(fields, requestDto, context));
         endTextInStringBuilder(context);
+        writeStringBuilderToFile(context.getAllSqlQueryStringBuilder());
         try {
             return new ByteArrayResource(Files.readAllBytes(Path.of("src/main/resources/converted-sql.sql")));
         } catch (IOException e) {

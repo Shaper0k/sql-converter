@@ -12,6 +12,9 @@ management:
 
 server:
   port: 8080
+  tomcat:
+    max-swallow-size: -1
+    max-http-form-post-size: -1
 
 springdoc:
   packages-to-scan: org.crm.controller

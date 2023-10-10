@@ -28,9 +28,9 @@ public class CsvFieldDto {
     private String fieldValueOne;
     @JsonProperty(TITLE)
     private String fieldValueTwo;
-    @JsonProperty(IS_VISIBLE)
-    private Boolean fieldValueThree;
     @JsonProperty(DICT_INST_REF_ID)
+    private String fieldValueThree;
+    @JsonIgnore
     private String fieldValueFour;
     @JsonIgnore
     private String fieldValueFive;

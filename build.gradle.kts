@@ -27,6 +27,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	//OTHER
 	implementation("commons-io:commons-io:2.14.0")
+	implementation("commons-fileupload:commons-fileupload:1.5")
 	implementation("org.apache.commons:commons-lang3:3.12.0")
 	implementation("org.apache.commons:commons-collections4:4.4")
 	implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.13.3")
