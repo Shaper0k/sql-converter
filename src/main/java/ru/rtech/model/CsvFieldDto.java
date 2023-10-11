@@ -2,7 +2,6 @@ package ru.rtech.model;
 
 import static ru.rtech.util.Constant.Field.DICT_INST_REF_ID;
 import static ru.rtech.util.Constant.Field.EXT_ID;
-import static ru.rtech.util.Constant.Field.IS_VISIBLE;
 import static ru.rtech.util.Constant.Field.TITLE;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -25,24 +24,24 @@ import lombok.NoArgsConstructor;
 public class CsvFieldDto {
 
     @JsonProperty(EXT_ID)
-    private String fieldValueOne;
+    private Object fieldValueOne;
     @JsonProperty(TITLE)
-    private String fieldValueTwo;
+    private Object fieldValueTwo;
     @JsonProperty(DICT_INST_REF_ID)
-    private String fieldValueThree;
+    private Object fieldValueThree;
     @JsonIgnore
-    private String fieldValueFour;
+    private Object fieldValueFour;
     @JsonIgnore
-    private String fieldValueFive;
+    private Object fieldValueFive;
     @JsonIgnore
-    private String fieldValueSix;
+    private Object fieldValueSix;
     @JsonIgnore
-    private String fieldValueSeven;
+    private Object fieldValueSeven;
     @JsonIgnore
-    private String fieldValueEight;
+    private Object fieldValueEight;
     @JsonIgnore
-    private String fieldValueNine;
+    private Object fieldValueNine;
     @JsonIgnore
-    private String fieldValueTen;
+    private Object fieldValueTen;
 
 }

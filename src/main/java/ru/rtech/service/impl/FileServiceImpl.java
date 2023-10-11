@@ -1,10 +1,14 @@
 package ru.rtech.service.impl;
 
+import static ru.rtech.util.Constant.COMMA;
+import static ru.rtech.util.Constant.DEFAULT_SIZE_FOR_INSERT;
 import static ru.rtech.util.Constant.POINT;
 import static ru.rtech.util.Constant.QueryText.END_INSERT_QUERY_TEXT;
 import static ru.rtech.util.Constant.QueryText.INSERT_QUERY_TEXT;
+import static ru.rtech.util.Constant.QueryText.QUERY_DELIMITER;
 import static ru.rtech.util.Constant.QueryText.START_SUBQUERY_TEXT;
 import static ru.rtech.util.Constant.QueryText.SUBQUERY_TEXT_INPUT;
+import static ru.rtech.util.Constant.STRING_SEPARATOR;
 import static ru.rtech.util.FieldUtils.getNeededConstantField;
 import static ru.rtech.util.FieldUtils.getSQLValuesInStringBuilder;
 import static ru.rtech.util.FieldUtils.setInNeededConstantField;
@@ -39,14 +43,16 @@ public class FileServiceImpl implements FileService {
     @Override
     public Resource convertSVCToSQLScriptFile(MultipartFile file, RequestBodyFieldDto requestDto) {
         var csvField = csvReadService.getValuesFieldCsv(file);
-        var context = new FieldContext(new StringBuilder(START_SUBQUERY_TEXT));
-        distinctSubQueryValue(csvField, requestDto, context);
-        addInsertTextInStringBuilder(context, requestDto);
-        updateSubQueryField(csvField, requestDto);
-        csvField.forEach(fields -> getSQLValuesInStringBuilder(fields, requestDto, context));
-        endTextInStringBuilder(context);
-        writeStringBuilderToFile(context.getAllSqlQueryStringBuilder());
+        var context = new FieldContext(new StringBuilder());
+        context.getAllSqlQueryStringBuilder()
+                    .append(START_SUBQUERY_TEXT);
+            distinctSubQueryValue(csvField, requestDto, context);
+            addInsertTextInStringBuilder(context, requestDto);
+            updateSubQueryField(csvField, requestDto);
+            csvField.forEach(fields -> getSQLValuesInStringBuilder(fields, requestDto, context));
+            endTextInStringBuilder(context);
         try {
+            writeStringBuilderToFile(context.getAllSqlQueryStringBuilder());
             return new ByteArrayResource(Files.readAllBytes(Path.of("src/main/resources/converted-sql.sql")));
         } catch (IOException e) {
             throw new BadReturnFileException(e.getMessage());
@@ -86,8 +92,9 @@ public class FileServiceImpl implements FileService {
 
     private void endTextInStringBuilder(FieldContext context) {
         var sb = context.getAllSqlQueryStringBuilder();
-        sb.replace(sb.lastIndexOf(","), sb.lastIndexOf(",") + 1, ";")
-                .append(END_INSERT_QUERY_TEXT);
+        sb.replace(sb.lastIndexOf(COMMA), sb.lastIndexOf(COMMA) + 1, STRING_SEPARATOR)
+                .append(END_INSERT_QUERY_TEXT)
+                .append(QUERY_DELIMITER);
     }
 
     @SneakyThrows

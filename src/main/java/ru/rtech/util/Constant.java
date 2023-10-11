@@ -6,6 +6,7 @@ import lombok.experimental.UtilityClass;
 public class Constant {
 
     public static final String DELIMITER = "|";
+    public static final Integer DEFAULT_SIZE_FOR_INSERT = 20000;
     public static final Character COLUMN_SEPARATOR = ';';
     public static final Character ESCAPE_CHAR = 'Ø';
     public static final Character QUOTE_CHAR = '"';
@@ -13,8 +14,10 @@ public class Constant {
     public static final String UNDERSCORE = "_";
     public static final String POINT = ".";
     public static final String APOSTROPHE = "'";
+    public static final String EMPTY = "";
     public static final String DOUBLE_APOSTROPHE = "''";
     public static final String COMMA = ",";
+    public static final String STRING_SEPARATOR = ";";
     public static final String CHARSET = "windows-1251";
 
     public class Field {
@@ -36,6 +39,10 @@ public class Constant {
                 $$\s
                 DECLARE\s
                 """;
+
+        public static final String QUERY_DELIMITER = """
+               _______________________________________________________________________________________\s
+                """;
         public static final String SUBQUERY_TEXT_INPUT = """     
                 %s bigint = (select id from %s where %s = '%s');\s
                 """;
@@ -48,7 +55,7 @@ public class Constant {
 
         public static final String END_INSERT_QUERY_TEXT = """
                 $$\s
-                END
+                END\s
                 """;
 
         public static final String ON_THREE_VALUES_QUERY_TEXT = "(%s, %s, %s";

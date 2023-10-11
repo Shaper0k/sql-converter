@@ -24,16 +24,16 @@ public class FieldUtils {
 
     public static String getNeededConstantField(RequestBodyFieldDto request, CsvFieldDto dto) {
         return switch (request.getSubQueryFieldNumber()) {
-            case 1 -> dto.getFieldValueOne();
-            case 2 -> dto.getFieldValueTwo();
-            case 3 -> dto.getFieldValueThree().toString();
-            case 4 -> dto.getFieldValueFour();
-            case 5 -> dto.getFieldValueFive();
-            case 6 -> dto.getFieldValueSix();
-            case 7 -> dto.getFieldValueSeven();
-            case 8 -> dto.getFieldValueEight();
-            case 9 -> dto.getFieldValueNine();
-            case 10 -> dto.getFieldValueTen();
+            case 1 -> String.valueOf(dto.getFieldValueOne());
+            case 2 -> String.valueOf(dto.getFieldValueTwo());
+            case 3 -> String.valueOf(dto.getFieldValueThree());
+            case 4 -> String.valueOf(dto.getFieldValueFour());
+            case 5 -> String.valueOf(dto.getFieldValueFive());
+            case 6 -> String.valueOf(dto.getFieldValueSix());
+            case 7 -> String.valueOf(dto.getFieldValueSeven());
+            case 8 -> String.valueOf(dto.getFieldValueEight());
+            case 9 -> String.valueOf(dto.getFieldValueNine());
+            case 10 -> String.valueOf(dto.getFieldValueTen());
             default -> throw new NotCorrectSubQueryNumberException(SUB_QUERY_FIELD_NUMBER_IS_NOT_CORRECT);
         };
     }
