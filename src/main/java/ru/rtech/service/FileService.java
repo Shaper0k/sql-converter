@@ -6,5 +6,6 @@ import ru.rtech.model.RequestBodyFieldDto;
 
 public interface FileService {
     Resource convertSVCToSQLScriptFile(MultipartFile file, RequestBodyFieldDto requestDto);
+    Resource updateSVCToSQLScriptFile(MultipartFile file, RequestBodyFieldDto requestDto);
 
 }

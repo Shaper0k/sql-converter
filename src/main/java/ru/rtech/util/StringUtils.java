@@ -20,6 +20,8 @@ import static ru.rtech.util.Constant.QueryText.ON_THREE_VALUES_QUERY_TEXT;
 import static ru.rtech.util.Constant.SPACE;
 import static ru.rtech.util.Constant.UNDERSCORE;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import lombok.experimental.UtilityClass;
 import ru.rtech.model.CsvFieldDto;
 import ru.rtech.model.FieldContext;
@@ -104,11 +106,12 @@ public class StringUtils {
         return context.getAllSqlQueryStringBuilder()
                 .append(ON_SEVEN_VALUES_QUERY_TEXT.formatted(getStringValueParam(csvFieldDto.getFieldValueOne()),
                         getStringValueParam(csvFieldDto.getFieldValueTwo()),
-                        getStringValueParam(csvFieldDto.getFieldValueThree()),
+                        new String(getStringValueParam(csvFieldDto.getFieldValueThree()).getBytes(),
+                                StandardCharsets.UTF_8),
                         getStringValueParam(csvFieldDto.getFieldValueFour()),
                         getStringValueParam(csvFieldDto.getFieldValueFive()),
                         getStringValueParam(csvFieldDto.getFieldValueSix()),
-                        getStringValueParam(csvFieldDto.getFieldValueSeven())
+                        csvFieldDto.getFieldValueSeven()
                 ))
                 .append(COMMA + SPACE)
                 .append(Boolean.TRUE.equals(updateDate) ? CURRENT_TIMESTAMP + COMMA : EMPTY)

@@ -19,13 +19,22 @@ public class Constant {
     public static final String COMMA = ",";
     public static final String STRING_SEPARATOR = ";";
     public static final String CHARSET = "windows-1251";
+    public static final String BRANCH = "Branch";
 
     public class Field {
 
         public static final String DICT_INST_REF_ID = "tdictionary_instance.ref_id";
         public static final String EXT_ID = "ext_id";
+        public static final String REF_ID = "ref_id";
+        public static final String DESCRIPTION = "description";
+        public static final String ACTIVE = "active";
+        public static final String IS_ACTIVE = "is_active";
+        public static final String COMPONENT_REF_ID= "tcomponent.ref_id";
+        public static final String FUNCTION_GROUP= "function_group";
         public static final String CODE = "code";
         public static final String TITLE = "title";
+        public static final String GUID = "guid";
+        public static final String TYPE = "type";
         public static final String IS_VISIBLE = "is_visible";
         public static final String FIELD_POSTFIX = "_FIELD";
         public static final String CURRENT_TIMESTAMP = "current_timestamp";
@@ -54,9 +63,12 @@ public class Constant {
                 """;
 
         public static final String END_INSERT_QUERY_TEXT = """
-                $$\s
                 END\s
+                $$\s
                 """;
+
+        public static final String UPDATE_NETWORK_QUERY_TEXT = "update db_dictionary_administration.tnetwork_branch set parent_tnetwork_branch_id = (select id from db_dictionary_administration.tnetwork_branch where guid = '%s') where guid = '%s';\n";
+        public static final String UPDATE_TERRITORY_QUERY_TEXT = "update db_dictionary_administration.tnetwork_branch set parent_tterritory_id = (select id from db_dictionary_administration.tterritory where guid = '%s') where guid = '%s';\n";
 
         public static final String ON_THREE_VALUES_QUERY_TEXT = "(%s, %s, %s";
         public static final String ON_FOUR_VALUES_QUERY_TEXT = "(%s, %s, %s, %s";

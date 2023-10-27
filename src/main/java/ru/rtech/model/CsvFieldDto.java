@@ -1,8 +1,16 @@
 package ru.rtech.model;
 
+import static ru.rtech.util.Constant.Field.ACTIVE;
+import static ru.rtech.util.Constant.Field.COMPONENT_REF_ID;
+import static ru.rtech.util.Constant.Field.DESCRIPTION;
 import static ru.rtech.util.Constant.Field.DICT_INST_REF_ID;
 import static ru.rtech.util.Constant.Field.EXT_ID;
+import static ru.rtech.util.Constant.Field.FUNCTION_GROUP;
+import static ru.rtech.util.Constant.Field.GUID;
+import static ru.rtech.util.Constant.Field.IS_ACTIVE;
+import static ru.rtech.util.Constant.Field.REF_ID;
 import static ru.rtech.util.Constant.Field.TITLE;
+import static ru.rtech.util.Constant.Field.TYPE;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -23,11 +31,11 @@ import lombok.NoArgsConstructor;
 @Data
 public class CsvFieldDto {
 
-    @JsonProperty(EXT_ID)
+    @JsonProperty("guid")
     private Object fieldValueOne;
-    @JsonProperty(TITLE)
+    @JsonProperty("parrentType")
     private Object fieldValueTwo;
-    @JsonProperty(DICT_INST_REF_ID)
+    @JsonProperty("parrentGuid")
     private Object fieldValueThree;
     @JsonIgnore
     private Object fieldValueFour;

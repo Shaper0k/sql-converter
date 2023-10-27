@@ -39,7 +39,7 @@ public class CsvReadServiceImpl implements CsvReadService {
         try {
             csvFieldDtoList = objectReader.<CsvFieldDto>readValues(new InputStreamReader(stream, CHARSET)).readAll();
         } catch (CsvReadException csvReadException) {
-            throw new FileNotCorrectException(CSV_FORMAT_IS_NOT_CORRECT);
+            throw new FileNotCorrectException(CSV_FORMAT_IS_NOT_CORRECT + " " + csvReadException.getMessage());
         } catch (IOException e) {
             throw new FileNotCorrectException(CSV_IS_NOT_CORRECT);
         }
