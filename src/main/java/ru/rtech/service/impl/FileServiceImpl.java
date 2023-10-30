@@ -2,11 +2,12 @@ package ru.rtech.service.impl;
 
 import static ru.rtech.util.Constant.BRANCH;
 import static ru.rtech.util.Constant.COMMA;
+import static ru.rtech.util.Constant.CUSTOM_PATH_STRING;
 import static ru.rtech.util.Constant.DEFAULT_SIZE_FOR_INSERT;
+import static ru.rtech.util.Constant.PATH_STRING;
 import static ru.rtech.util.Constant.POINT;
 import static ru.rtech.util.Constant.QueryText.END_INSERT_QUERY_TEXT;
 import static ru.rtech.util.Constant.QueryText.INSERT_QUERY_TEXT;
-import static ru.rtech.util.Constant.QueryText.QUERY_DELIMITER;
 import static ru.rtech.util.Constant.QueryText.START_SUBQUERY_TEXT;
 import static ru.rtech.util.Constant.QueryText.SUBQUERY_TEXT_INPUT;
 import static ru.rtech.util.Constant.QueryText.UPDATE_NETWORK_QUERY_TEXT;
@@ -23,6 +24,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -36,31 +38,66 @@ import ru.rtech.model.RequestBodyFieldDto;
 import ru.rtech.service.CsvReadService;
 import ru.rtech.service.FileService;
 import ru.rtech.util.exception.BadReturnFileException;
+import ru.rtech.validator.NotNullFieldsValidator;
 
 @Service
 @RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
 
     private final CsvReadService csvReadService;
+    private final NotNullFieldsValidator validator;
 
     @Override
-    public Resource convertSVCToSQLScriptFile(MultipartFile file, RequestBodyFieldDto requestDto) {
+    public void convertSVCToSQLScriptFile(MultipartFile file, RequestBodyFieldDto requestDto) {
         var csvField = csvReadService.getValuesFieldCsv(file);
-        var context = new FieldContext(new StringBuilder());
-        context.getAllSqlQueryStringBuilder()
+        if (csvField.size() > DEFAULT_SIZE_FOR_INSERT) {
+            int fileIterator = 1;
+            for (int i = 0; i < csvField.size(); i += DEFAULT_SIZE_FOR_INSERT) {
+                var context = new FieldContext(new StringBuilder());
+                int endIndex = Math.min(i + DEFAULT_SIZE_FOR_INSERT, csvField.size());
+                var batch = csvField.subList(i, endIndex);
+                context.getAllSqlQueryStringBuilder()
+                        .append(START_SUBQUERY_TEXT);
+                distinctSubQueryValue(batch, requestDto, context);
+                addInsertTextInStringBuilder(context, requestDto);
+                updateSubQueryField(batch, requestDto);
+                createValuesForSqlQuery(context, requestDto, batch);
+                endTextInStringBuilder(context);
+                writeInFileForMoreRows(context, Integer.toString(fileIterator));
+                fileIterator++;
+            }
+        } else {
+            var context = new FieldContext(new StringBuilder());
+            context.getAllSqlQueryStringBuilder()
                     .append(START_SUBQUERY_TEXT);
             distinctSubQueryValue(csvField, requestDto, context);
             addInsertTextInStringBuilder(context, requestDto);
             updateSubQueryField(csvField, requestDto);
-            csvField.forEach(fields -> getSQLValuesInStringBuilder(fields, requestDto, context));
+            createValuesForSqlQuery(context, requestDto, csvField);
             endTextInStringBuilder(context);
-        try {
-            writeStringBuilderToFile(context.getAllSqlQueryStringBuilder());
-            return new ByteArrayResource(Files.readAllBytes(Path.of("src/main/resources/converted-sql.sql")));
-        } catch (IOException e) {
-            throw new BadReturnFileException(e.getMessage());
+            writeInFile(context);
         }
+    }
 
+    private void createValuesForSqlQuery(FieldContext context, RequestBodyFieldDto requestDto,
+                                         List<CsvFieldDto> batch) {
+        batch.forEach(fields -> {
+            ArrayList<Boolean> validateList = new ArrayList<>();
+            requestDto.getNotNullFields()
+                    .forEach(notNullField ->
+                            validateList.add(validator.validateNotNullFields(notNullField, fields)));
+            if (!validateList.contains(true)) {
+                getSQLValuesInStringBuilder(fields, requestDto, context);
+            }
+        });
+    }
+
+    private void writeInFile(FieldContext context) {
+        writeStringBuilderToFile(context.getAllSqlQueryStringBuilder(), PATH_STRING);
+    }
+
+    private void writeInFileForMoreRows(FieldContext context, String fileIterator) {
+        writeStringBuilderToFile(context.getAllSqlQueryStringBuilder(), CUSTOM_PATH_STRING.formatted(fileIterator));
     }
 
     @Override
@@ -72,8 +109,7 @@ public class FileServiceImpl implements FileService {
                     if (BRANCH.contains(field.getFieldValueTwo().toString())) {
                         stringBuilder.append(UPDATE_NETWORK_QUERY_TEXT.formatted(field.getFieldValueThree(),
                                 field.getFieldValueOne()));
-                    }
-                    else {
+                    } else {
                         stringBuilder.append(UPDATE_TERRITORY_QUERY_TEXT.formatted(field.getFieldValueThree(),
                                 field.getFieldValueOne()));
                     }
@@ -120,13 +156,12 @@ public class FileServiceImpl implements FileService {
     private void endTextInStringBuilder(FieldContext context) {
         var sb = context.getAllSqlQueryStringBuilder();
         sb.replace(sb.lastIndexOf(COMMA), sb.lastIndexOf(COMMA) + 1, STRING_SEPARATOR)
-                .append(END_INSERT_QUERY_TEXT)
-                .append(QUERY_DELIMITER);
+                .append(END_INSERT_QUERY_TEXT);
     }
 
     @SneakyThrows
-    private File writeStringBuilderToFile(StringBuilder stringBuilder) {
-        File fileOutput = new File("src/main/resources/converted-sql.sql");
+    private File writeStringBuilderToFile(StringBuilder stringBuilder, String path) {
+        File fileOutput = new File(path);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileOutput))) {
             writer.append(stringBuilder);
         }
@@ -135,7 +170,6 @@ public class FileServiceImpl implements FileService {
 
     @SneakyThrows
     private File writeUpdateStringBuilderToFile(StringBuilder stringBuilder) {
-        System.out.println(stringBuilder.toString());
         File fileOutput = new File("src/main/resources/update-sql.sql");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileOutput))) {
             writer.append(stringBuilder);

@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.rtech.model.RequestBodyFieldDto;
 
 public interface FileService {
-    Resource convertSVCToSQLScriptFile(MultipartFile file, RequestBodyFieldDto requestDto);
+    void convertSVCToSQLScriptFile(MultipartFile file, RequestBodyFieldDto requestDto);
     Resource updateSVCToSQLScriptFile(MultipartFile file, RequestBodyFieldDto requestDto);
 
 }

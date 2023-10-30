@@ -1,6 +1,7 @@
 package ru.rtech.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class RequestBodyFieldDto {
                                // Пример (id, ref_id, code, title, tdictionary_instance.id, create_date)
     private Integer countField; // колличество полей переданых на вход
     private Integer subQueryFieldNumber; // номер колонки с значением для подзапроса
+    private List<Integer> notNullFields; // номера полей которые не могу быть пустыми(строки с такими значениями будут игнорироваться)
     private Boolean updateTime; // если при insert нужно заполнить поле время обновления записи
                                 // то в каждом запросе добавиться в конце 'current_timestamp'
     private Boolean createTime; // поднять флаг если в запросе есть время создания записи

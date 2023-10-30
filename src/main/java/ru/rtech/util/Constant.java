@@ -1,13 +1,15 @@
 package ru.rtech.util;
 
+import java.nio.file.Path;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class Constant {
 
     public static final String DELIMITER = "|";
-    public static final Integer DEFAULT_SIZE_FOR_INSERT = 20000;
+    public static final Integer DEFAULT_SIZE_FOR_INSERT = 40000;
     public static final Character COLUMN_SEPARATOR = ';';
+    public static final Character COLUMN_СOMMA = ',';
     public static final Character ESCAPE_CHAR = 'Ø';
     public static final Character QUOTE_CHAR = '"';
     public static final String SPACE = " ";
@@ -20,6 +22,9 @@ public class Constant {
     public static final String STRING_SEPARATOR = ";";
     public static final String CHARSET = "windows-1251";
     public static final String BRANCH = "Branch";
+    public static final Path PATH_CONVERT = Path.of("src/main/resources/converted-sql.sql");
+    public static final String PATH_STRING = "src/main/resources/converted-sql.sql";
+    public static final String CUSTOM_PATH_STRING = "src/main/resources/bigconverted/converted-sql-%s.sql";
 
     public class Field {
 
@@ -88,6 +93,7 @@ public class Constant {
         public static final String COUNT_FIELD_IS_NOT_CORRECT = "count fields is maybe >3 or <10";
         public static final String CSV_IS_NOT_CORRECT = "file cannot read";
         public static final String CSV_FORMAT_IS_NOT_CORRECT = "format in file is not correct";
+        public static final String NOT_NULL_FIELDS_HAVE_BAD_VALUE = "NotNullFields have bad value = %s";
 
     }
 

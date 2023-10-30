@@ -20,7 +20,6 @@ import static ru.rtech.util.Constant.QueryText.ON_THREE_VALUES_QUERY_TEXT;
 import static ru.rtech.util.Constant.SPACE;
 import static ru.rtech.util.Constant.UNDERSCORE;
 
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import lombok.experimental.UtilityClass;
 import ru.rtech.model.CsvFieldDto;
@@ -106,8 +105,7 @@ public class StringUtils {
         return context.getAllSqlQueryStringBuilder()
                 .append(ON_SEVEN_VALUES_QUERY_TEXT.formatted(getStringValueParam(csvFieldDto.getFieldValueOne()),
                         getStringValueParam(csvFieldDto.getFieldValueTwo()),
-                        new String(getStringValueParam(csvFieldDto.getFieldValueThree()).getBytes(),
-                                StandardCharsets.UTF_8),
+                        getStringValueParam(csvFieldDto.getFieldValueThree()),
                         getStringValueParam(csvFieldDto.getFieldValueFour()),
                         getStringValueParam(csvFieldDto.getFieldValueFive()),
                         getStringValueParam(csvFieldDto.getFieldValueSix()),
@@ -145,10 +143,11 @@ public class StringUtils {
                         getStringValueParam(csvFieldDto.getFieldValueThree()),
                         getStringValueParam(csvFieldDto.getFieldValueFour()),
                         getStringValueParam(csvFieldDto.getFieldValueFive()),
-                        getStringValueParam(csvFieldDto.getFieldValueSix()),
+                        getStringValueParam(
+                                csvFieldDto.getFieldValueSix().toString().replace("1", "true").replace("0", "false")),
                         getStringValueParam(csvFieldDto.getFieldValueSeven()),
                         getStringValueParam(csvFieldDto.getFieldValueEight()),
-                        getStringValueParam(csvFieldDto.getFieldValueNine())
+                        csvFieldDto.getFieldValueNine()
                 ))
                 .append(COMMA + SPACE)
                 .append(Boolean.TRUE.equals(updateDate) ? CURRENT_TIMESTAMP + COMMA : EMPTY)

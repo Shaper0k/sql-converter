@@ -1,0 +1,11 @@
+{
+  "dbName": "db_dictionary_administration",
+  "schemeName": "tservice_catalog",
+  "subQueryName": "db_dictionary_administration.tdictionary_instance.ref_id",
+  "valuesText": "uid, ext_id, type, title, code, is_const, service_type, equip_type,tdictionary_instance_id, create_date, last_update_date",
+  "countField": 9,
+  "subQueryFieldNumber": 9,
+  "notNullFields": [1,2,3,4],
+  "updateTime": true,
+  "createTime": true
+}
