@@ -9,6 +9,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvReadException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,8 @@ public class CsvReadServiceImpl implements CsvReadService {
     private List<CsvFieldDto> read(InputStream stream) {
         List<CsvFieldDto> csvFieldDtoList;
         try {
-            csvFieldDtoList = objectReader.<CsvFieldDto>readValues(new InputStreamReader(stream, CHARSET)).readAll();
+            Charset charset = Charset.forName(CHARSET);
+            csvFieldDtoList = objectReader.<CsvFieldDto>readValues(new InputStreamReader(stream, charset)).readAll();
         } catch (CsvReadException csvReadException) {
             throw new FileNotCorrectException(CSV_FORMAT_IS_NOT_CORRECT + " " + csvReadException.getMessage());
         } catch (IOException e) {

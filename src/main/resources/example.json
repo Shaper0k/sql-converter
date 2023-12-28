@@ -1,11 +1,13 @@
 {
-  "dbName": "db_dictionary_administration",
-  "schemeName": "tservice_catalog",
-  "subQueryName": "db_dictionary_administration.tdictionary_instance.ref_id",
-  "valuesText": "uid, ext_id, type, title, code, is_const, service_type, equip_type,tdictionary_instance_id, create_date, last_update_date",
-  "countField": 9,
-  "subQueryFieldNumber": 9,
-  "notNullFields": [1,2,3,4],
+  "dbName": "db_client_profile",
+  "schemeName": "tservice_product_mapping",
+  "subQueryData": {
+    "SELECT id FROM db_client_profile.tproduct WHERE guid = ": 3,
+    "SELECT id FROM db_client_profile.text_system WHERE ref_id = ": 4
+  },
+  "notNullFields": [3,4],
+  "valuesText": "service_catalog, standart, tproduct_id, text_system_id, guid, last_update_date, create_date",
+  "countField": 7,
   "updateTime": true,
   "createTime": true
 }

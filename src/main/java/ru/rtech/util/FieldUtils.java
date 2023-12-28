@@ -22,8 +22,8 @@ import ru.rtech.util.exception.NotCorrectSubQueryNumberException;
 @UtilityClass
 public class FieldUtils {
 
-    public static String getNeededConstantField(RequestBodyFieldDto request, CsvFieldDto dto) {
-        return switch (request.getSubQueryFieldNumber()) {
+    public static String getNeededConstantField(Integer subQueryFieldNumber, CsvFieldDto dto) {
+        return switch (subQueryFieldNumber) {
             case 1 -> String.valueOf(dto.getFieldValueOne());
             case 2 -> String.valueOf(dto.getFieldValueTwo());
             case 3 -> String.valueOf(dto.getFieldValueThree());
@@ -38,8 +38,8 @@ public class FieldUtils {
         };
     }
 
-    public static void setInNeededConstantField(RequestBodyFieldDto request, CsvFieldDto dto) {
-        switch (request.getSubQueryFieldNumber()) {
+    public static void setInNeededConstantField(Integer subQueryFieldNumber, CsvFieldDto dto) {
+        switch (subQueryFieldNumber) {
             case 1 -> dto.setFieldValueOne(getStringParamWithPostfix(dto.getFieldValueOne()));
             case 2 -> dto.setFieldValueTwo(getStringParamWithPostfix(dto.getFieldValueTwo()));
             case 3 -> dto.setFieldValueThree(getStringParamWithPostfix(dto.getFieldValueThree()));

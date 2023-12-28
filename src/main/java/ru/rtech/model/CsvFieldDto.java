@@ -20,23 +20,23 @@ import lombok.NoArgsConstructor;
 @Data
 public class CsvFieldDto {
 
-    @JsonProperty("uid")
+    @JsonProperty("service_catalog")
     private Object fieldValueOne;
-    @JsonProperty("ext_id")
+    @JsonProperty("standart")
     private Object fieldValueTwo;
-    @JsonProperty("type")
+    @JsonProperty("product_guid")
     private Object fieldValueThree;
-    @JsonProperty("title")
+    @JsonProperty("ext_system")
     private Object fieldValueFour;
-    @JsonProperty("code")
+    @JsonProperty("guid")
     private Object fieldValueFive;
-    @JsonProperty("is_const")
+    @JsonIgnore
     private Object fieldValueSix;
-    @JsonProperty("service_type")
+    @JsonIgnore
     private Object fieldValueSeven;
-    @JsonProperty("equip_type")
+    @JsonIgnore
     private Object fieldValueEight;
-    @JsonProperty("tdictionary_instance.ref_id")
+    @JsonIgnore
     private Object fieldValueNine;
     @JsonIgnore
     private Object fieldValueTen;

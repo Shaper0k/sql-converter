@@ -4,6 +4,7 @@ import static ru.rtech.util.Constant.BRANCH;
 import static ru.rtech.util.Constant.COMMA;
 import static ru.rtech.util.Constant.CUSTOM_PATH_STRING;
 import static ru.rtech.util.Constant.DEFAULT_SIZE_FOR_INSERT;
+import static ru.rtech.util.Constant.ErrorText.BAD_REQUEST_ERROR_MESSAGE;
 import static ru.rtech.util.Constant.PATH_STRING;
 import static ru.rtech.util.Constant.POINT;
 import static ru.rtech.util.Constant.QueryText.END_INSERT_QUERY_TEXT;
@@ -37,6 +38,7 @@ import ru.rtech.model.FieldContext;
 import ru.rtech.model.RequestBodyFieldDto;
 import ru.rtech.service.CsvReadService;
 import ru.rtech.service.FileService;
+import ru.rtech.util.exception.BadRequestException;
 import ru.rtech.util.exception.BadReturnFileException;
 import ru.rtech.validator.NotNullFieldsValidator;
 
@@ -123,13 +125,12 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    private void getStringBuilderWithFirstParams(String paramValue, RequestBodyFieldDto requestDto,
+    private void getStringBuilderWithFirstParams(String paramValue, String subQueryName,
                                                  FieldContext context) {
         context.getAllSqlQueryStringBuilder().append(SUBQUERY_TEXT_INPUT.formatted(
                 getStringParamWithPostfix(paramValue),
-                requestDto.getSubQueryName().substring(0, requestDto.getSubQueryName().lastIndexOf(POINT)),
-                requestDto.getSubQueryName().
-                        substring(requestDto.getSubQueryName().lastIndexOf(POINT) + 1), paramValue));
+                subQueryName.substring(0, subQueryName.lastIndexOf(POINT)),
+                subQueryName.substring(subQueryName.lastIndexOf(POINT) + 1), paramValue));
     }
 
     private void addInsertTextInStringBuilder(FieldContext context, RequestBodyFieldDto requestDto) {
@@ -140,17 +141,23 @@ public class FileServiceImpl implements FileService {
 
     private void distinctSubQueryValue(List<CsvFieldDto> csvField, RequestBodyFieldDto requestDto,
                                        FieldContext context) {
-        var subQueryParam = csvField.stream()
-                .map(fields -> getNeededConstantField(requestDto, fields))
-                .distinct()
-                .toList();
-        subQueryParam.forEach(string -> getStringBuilderWithFirstParams(string, requestDto, context));
+        if (requestDto.getSubQueryData().size() == 0) {
+            throw new BadRequestException(BAD_REQUEST_ERROR_MESSAGE);
+        }
+        requestDto.getSubQueryData().forEach((key, value) -> {
+                    var subQueryParam = csvField.stream()
+                            .map(fields -> getNeededConstantField(value, fields))
+                            .distinct()
+                            .toList();
+                    subQueryParam.forEach(string -> getStringBuilderWithFirstParams(string, key, context));
+                }
+        );
+
     }
 
     private void updateSubQueryField(List<CsvFieldDto> csvField, RequestBodyFieldDto requestDto) {
-        for (CsvFieldDto dto : csvField) {
-            setInNeededConstantField(requestDto, dto);
-        }
+        csvField.forEach(csvFieldDto -> requestDto.getSubQueryData()
+                .forEach((key, value) -> setInNeededConstantField(value, csvFieldDto)));
     }
 
     private void endTextInStringBuilder(FieldContext context) {

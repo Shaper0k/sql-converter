@@ -2,6 +2,7 @@ package ru.rtech.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,16 +17,16 @@ public class RequestBodyFieldDto {
 
     private String dbName; // - наименование БД
     private String schemeName; // - наименование схемы
-    private String subQueryName; // - полный путь до значения подзапроса в бд
-                                 // - Пример: db.tdictionary_instance.ref_id
     private String valuesText; // текст из VALUES
-                               // Пример (id, ref_id, code, title, tdictionary_instance.id, create_date)
+    // Пример (id, ref_id, code, title, tdictionary_instance.id, create_date)
     private Integer countField; // колличество полей переданых на вход
-    private Integer subQueryFieldNumber; // номер колонки с значением для подзапроса
+    private Map<String, Integer> subQueryData; // - key - полный путь до значения подзапроса в бд
+                                               // - Пример: db.tdictionary_instance.ref_id
+                                                // - value - номер колонки с значением для подзапроса
     private List<Integer> notNullFields; // номера полей которые не могу быть пустыми(строки с такими значениями будут игнорироваться)
     private Boolean updateTime; // если при insert нужно заполнить поле время обновления записи
-                                // то в каждом запросе добавиться в конце 'current_timestamp'
+    // то в каждом запросе добавиться в конце 'current_timestamp'
     private Boolean createTime; // поднять флаг если в запросе есть время создания записи
-                                // к каждой записи добавиться в конце 'current_timestamp'
+    // к каждой записи добавиться в конце 'current_timestamp'
 
 }

@@ -29,21 +29,3 @@ logger:
   tags: template, service
   zone: localhost
   level: DEBUG
-
-logging:
-  level:
-    ROOT: DEBUG
-
-#tracing
-app:
-  tracing:
-    enable: true
-    prefix: "header."
-    headers:
-      - x-taskid
-      - x-business-key
-      - x-mrf
-      - x-affiliate-id
-      - x-client-call-time-millis
-      - x-use-cache
-      - x-session-id

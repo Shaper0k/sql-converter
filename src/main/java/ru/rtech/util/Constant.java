@@ -94,6 +94,8 @@ public class Constant {
         public static final String CSV_IS_NOT_CORRECT = "file cannot read";
         public static final String CSV_FORMAT_IS_NOT_CORRECT = "format in file is not correct";
         public static final String NOT_NULL_FIELDS_HAVE_BAD_VALUE = "NotNullFields have bad value = %s";
+        public static final String BAD_REQUEST_ERROR_MESSAGE = "Колличество полей подзапроса и колличество значений "
+                + "подзапроса не совпадают";
 
     }
 

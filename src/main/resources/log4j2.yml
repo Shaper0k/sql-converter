@@ -1,0 +1,39 @@
+Configuration:
+  status: error
+  name: LoggerYamlConfiguration
+  Appenders:
+    Console:
+      name: ConsoleAppender
+      PatternLayout:
+        Pattern: "%d %-5p [%c{1}:%L] %m%n"
+        Charset: "UTF-8"
+      Filters:
+        ThresholdFilter:
+          level: INFO
+    RollingFile:
+      name: RollingFileAppender
+      append: true
+      fileName: "/var/log/filebeat.log"
+      filePattern: "/var/log/filebeat-%i.log.gz"
+      JsonLayout:
+        eventEol: true
+        compact: true
+        properties: true
+        locationInfo: true
+        objectMessageAsJsonObject: true
+      Policies:
+        SizeBasedTriggeringPolicy:
+          size: "200MB"
+      DefaultRolloverStrategy:
+        max: 10
+  Loggers:
+    logger:
+      - name: "org.crm.kibana.KibanaLogger"
+        level: ${spring:logger.level}
+        AppenderRef:
+          ref: RollingFileAppender
+    Root:
+      level: ${spring:logger.level}
+      includeLocation: true
+      AppenderRef:
+        ref: ConsoleAppender
