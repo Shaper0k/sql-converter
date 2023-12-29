@@ -5,6 +5,7 @@ import static ru.rtech.util.Constant.COMMA;
 import static ru.rtech.util.Constant.CUSTOM_PATH_STRING;
 import static ru.rtech.util.Constant.DEFAULT_SIZE_FOR_INSERT;
 import static ru.rtech.util.Constant.ErrorText.BAD_REQUEST_ERROR_MESSAGE;
+import static ru.rtech.util.Constant.PARENT_GUID;
 import static ru.rtech.util.Constant.PATH_STRING;
 import static ru.rtech.util.Constant.POINT;
 import static ru.rtech.util.Constant.QueryText.END_INSERT_QUERY_TEXT;
@@ -26,7 +27,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.core.io.ByteArrayResource;
@@ -55,26 +60,26 @@ public class FileServiceImpl implements FileService {
         if (csvField.size() > DEFAULT_SIZE_FOR_INSERT) {
             int fileIterator = 1;
             for (int i = 0; i < csvField.size(); i += DEFAULT_SIZE_FOR_INSERT) {
-                var context = new FieldContext(new StringBuilder());
+                var context = new FieldContext(new StringBuilder(), new HashMap<>());
                 int endIndex = Math.min(i + DEFAULT_SIZE_FOR_INSERT, csvField.size());
                 var batch = csvField.subList(i, endIndex);
                 context.getAllSqlQueryStringBuilder()
                         .append(START_SUBQUERY_TEXT);
                 distinctSubQueryValue(batch, requestDto, context);
                 addInsertTextInStringBuilder(context, requestDto);
-                updateSubQueryField(batch, requestDto);
+                updateSubQueryField(batch, requestDto, context);
                 createValuesForSqlQuery(context, requestDto, batch);
                 endTextInStringBuilder(context);
                 writeInFileForMoreRows(context, Integer.toString(fileIterator));
                 fileIterator++;
             }
         } else {
-            var context = new FieldContext(new StringBuilder());
+            var context = new FieldContext(new StringBuilder(), new HashMap<>());
             context.getAllSqlQueryStringBuilder()
                     .append(START_SUBQUERY_TEXT);
             distinctSubQueryValue(csvField, requestDto, context);
             addInsertTextInStringBuilder(context, requestDto);
-            updateSubQueryField(csvField, requestDto);
+            updateSubQueryField(csvField, requestDto, context);
             createValuesForSqlQuery(context, requestDto, csvField);
             endTextInStringBuilder(context);
             writeInFile(context);
@@ -126,11 +131,12 @@ public class FileServiceImpl implements FileService {
     }
 
     private void getStringBuilderWithFirstParams(String paramValue, String subQueryName,
-                                                 FieldContext context) {
+                                                 FieldContext context, boolean isGuid, String guid) {
         context.getAllSqlQueryStringBuilder().append(SUBQUERY_TEXT_INPUT.formatted(
                 getStringParamWithPostfix(paramValue),
                 subQueryName.substring(0, subQueryName.lastIndexOf(POINT)),
-                subQueryName.substring(subQueryName.lastIndexOf(POINT) + 1), paramValue));
+                subQueryName.substring(subQueryName.lastIndexOf(POINT) + 1),
+                isGuid ? guid : paramValue));
     }
 
     private void addInsertTextInStringBuilder(FieldContext context, RequestBodyFieldDto requestDto) {
@@ -144,20 +150,30 @@ public class FileServiceImpl implements FileService {
         if (requestDto.getSubQueryData().size() == 0) {
             throw new BadRequestException(BAD_REQUEST_ERROR_MESSAGE);
         }
+        Map<String, String> guidNameMap = new HashMap<>();
+        AtomicReference<Integer> iterator = new AtomicReference<>(1);
         requestDto.getSubQueryData().forEach((key, value) -> {
                     var subQueryParam = csvField.stream()
                             .map(fields -> getNeededConstantField(value, fields))
                             .distinct()
                             .toList();
-                    subQueryParam.forEach(string -> getStringBuilderWithFirstParams(string, key, context));
+                    if ((Objects.equals(key, "SELECT id FROM db_client_profile.tproduct WHERE guid = "))) {
+                        subQueryParam.forEach(string -> {
+                            guidNameMap.put(string, PARENT_GUID.formatted(iterator));
+                            getStringBuilderWithFirstParams(PARENT_GUID.formatted(iterator), key, context, true, string);
+                            iterator.set(iterator.get() + 1);
+                        });
+                    } else {
+                        subQueryParam.forEach(string -> getStringBuilderWithFirstParams(string, key, context, false, null));
+                    }
                 }
         );
-
+        context.setGuidMap(guidNameMap);
     }
 
-    private void updateSubQueryField(List<CsvFieldDto> csvField, RequestBodyFieldDto requestDto) {
+    private void updateSubQueryField(List<CsvFieldDto> csvField, RequestBodyFieldDto requestDto, FieldContext context) {
         csvField.forEach(csvFieldDto -> requestDto.getSubQueryData()
-                .forEach((key, value) -> setInNeededConstantField(value, csvFieldDto)));
+                .forEach((key, value) -> setInNeededConstantField(value, csvFieldDto, context)));
     }
 
     private void endTextInStringBuilder(FieldContext context) {

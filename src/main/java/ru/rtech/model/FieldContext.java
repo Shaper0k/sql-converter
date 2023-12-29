@@ -1,5 +1,6 @@
 package ru.rtech.model;
 
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,5 +13,6 @@ import lombok.NoArgsConstructor;
 public class FieldContext {
 
     StringBuilder allSqlQueryStringBuilder;
+    Map<String, String> guidMap;
 
 }

@@ -38,11 +38,11 @@ public class FieldUtils {
         };
     }
 
-    public static void setInNeededConstantField(Integer subQueryFieldNumber, CsvFieldDto dto) {
+    public static void setInNeededConstantField(Integer subQueryFieldNumber, CsvFieldDto dto, FieldContext context) {
         switch (subQueryFieldNumber) {
             case 1 -> dto.setFieldValueOne(getStringParamWithPostfix(dto.getFieldValueOne()));
             case 2 -> dto.setFieldValueTwo(getStringParamWithPostfix(dto.getFieldValueTwo()));
-            case 3 -> dto.setFieldValueThree(getStringParamWithPostfix(dto.getFieldValueThree()));
+            case 3 -> dto.setFieldValueThree(context.getGuidMap().get(dto.getFieldValueThree().toString()));
             case 4 -> dto.setFieldValueFour(getStringParamWithPostfix(dto.getFieldValueFour()));
             case 5 -> dto.setFieldValueFive(getStringParamWithPostfix(dto.getFieldValueFive()));
             case 6 -> dto.setFieldValueSix(getStringParamWithPostfix(dto.getFieldValueSix()));

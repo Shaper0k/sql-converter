@@ -22,6 +22,7 @@ public class Constant {
     public static final String STRING_SEPARATOR = ";";
     public static final String CHARSET = "windows-1251";
     public static final String BRANCH = "Branch";
+    public static final String PARENT_GUID = "PARENT_GUID_%s";
     public static final Path PATH_CONVERT = Path.of("src/main/resources/converted-sql.sql");
     public static final String PATH_STRING = "src/main/resources/converted-sql.sql";
     public static final String CUSTOM_PATH_STRING = "src/main/resources/bigconverted/converted-sql-%s.sql";
