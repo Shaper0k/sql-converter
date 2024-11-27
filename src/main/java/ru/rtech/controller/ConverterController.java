@@ -19,7 +19,7 @@ public class ConverterController {
 
     @PostMapping(value = "/convert", consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public void getSVCFile(
+    public void getScvFile(
             @RequestPart(value = "file") final MultipartFile multipartFile,
             @RequestPart(value = "body") RequestBodyFieldDto requestDto) {
         fileService.convertSVCToSQLScriptFile(multipartFile, requestDto);
@@ -27,7 +27,7 @@ public class ConverterController {
 
     @PostMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public ResponseEntity<Resource> updateSVCFile(
+    public ResponseEntity<Resource> updateScvFile(
             @RequestPart(value = "file") final MultipartFile multipartFile,
             @RequestPart(value = "body") RequestBodyFieldDto requestDto) {
         return ResponseEntity.ok(fileService.updateSVCToSQLScriptFile(multipartFile, requestDto));
