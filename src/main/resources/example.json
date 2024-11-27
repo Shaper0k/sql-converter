@@ -2,8 +2,8 @@
   "dbName": "db_client_profile",
   "schemeName": "tservice_product_mapping",
   "subQueryData": {
-    "SELECT id FROM db_client_profile.tproduct WHERE guid = ": 3,
-    "SELECT id FROM db_client_profile.text_system WHERE ref_id = ": 4
+    "SELECT id FROM db_client_profile.tproduct WHERE guid": 3,
+    "SELECT id FROM db_client_profile.text_system WHERE ref_id": 4
   },
   "notNullFields": [3,4],
   "valuesText": "service_catalog, standart, tproduct_id, text_system_id, guid, last_update_date, create_date",
